@@ -170,7 +170,7 @@ INFERENCE_FILE = "../inferences.csv" # Where the generated inferences file will 
 [Olga Russakovsky*, Jia Deng*, Hao Su, Jonathan Krause, Sanjeev Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla, Michael Bernstein, Alexander C. Berg and Li Fei-Fei. (* = equal contribution) ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.](https://arxiv.org/abs/1409.0575)
 
 
-## Marathon Match - Solution Description &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![Topcoder](./misc/tcl_re.png "Topcoer")
+## Marathon Match - Solution Description &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ![Topcoder](./misc/tcl_re.png "Topcoder")
 
 **1. Introduction:**    
   Tell us a bit about yourself, and why you have decided to participate in the contest.  
