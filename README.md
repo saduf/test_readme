@@ -195,13 +195,12 @@ I was able to build a very shallow CNN with an accuracy of 20%; doing this paved
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This repository provides an end-to-end solution on how to Fine-Tune a TensorFlow<sup>TM</sup> application, and export the resulting network.meta file. Finally after 2 weeks of work, I was able to train, evaluate, and export a network.meta file corresponding to a MobileNet_01_224 implementation.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Using the compiled.graph to perform inference with the Movidius NCS was was giving me a zero score for some days, the issue was that the provided template was implemented for a Caffe solution, reading images in BGR format instead of the RGB format expected by TensorFlow.  
-Training features had to be normalized to a range of [0,1], using a mean of 0.5 and a scale factor of 2 to finally bring its values to a range between [-1,1], and finally apply a center crop of 0.875, see Inception Preprocessing.  
+Training features had to be normalized to a range of [0,1], using a mean of 0.5 and a scale factor of 2 to finally bring its values to a range between [-1,1], and finally apply a center crop of 0.875, [see Inception Preprocessing](https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py).  
 
-The first network I tried was MobileNet_01_224 Fine-Tuning all the layers, with the provided [80k images dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example), the resulting compiled.graph takes ~40 ms to infer one image, and the compiled.graph file size was around 6.5 MB.  
+I decided to go with a MobileNet_01_224 Fine-Tuning all the layers, the resulting compiled.graph takes ~40 ms to infer one image, and the compiled.graph file size is around 6.5 MB.  
 Comparing the top-1 and top-5 accuracy results from other networks like [Inception-ResNet-V2](https://keras.io/applications/#inceptionresnetv2) or [DenseNet-121](https://keras.io/applications/#densenet), we can see that that MobileNet_01_224 top-1 accuracy is lower by ~ 13 and 10 percent, respectively.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From [ncsdk release notes](https://github.com/movidius/ncsdk/blob/master/docs/release_notes.md), we can see support for Inception-ResNet-V2, which in turn represented a great option to experiment based on the extent of accuracy improvement. On the other side, this is very deep network with more than 10 times the number of parameters compared to of the MobileNet_01 architecture.  
-Results proved that the inference time was really penalized in terms of the evaluating Log Loss function, the resulting score was very similar to the one obtained by the MobileNet_01_224 model.  
-Concluding that the Inception-ResNet-V2 model was very expensive to train, and was taking 10 times longer for inference, ~ 400 ms.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From [ncsdk release notes](https://github.com/movidius/ncsdk/blob/master/docs/release_notes.md), we can see support for Inception-ResNet-V2, on the downn side, this is very deep network with more than 10 times the number of parameters compared to of the MobileNet_01 architecture.   
+Concluding that the Inception-ResNet-V2 model was very expensive to train, and was taking 10 times longer for inference, ~ 400 ms, the resulting score was very similar to the one obtained by the MobileNet_01_224 model.
 
 
 **3. Final Approach**  
