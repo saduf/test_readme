@@ -171,6 +171,7 @@ INFERENCE_FILE = "../inferences.csv" # Where the generated inferences file will 
 
 
 # Marathon Match - Solution Description
+![Topcoder](./misc/tcl_re.png "Topcoer")
 
 **1. Introduction:**    
   Tell us a bit about yourself, and why you have decided to participate in the contest.  
