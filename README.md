@@ -1,0 +1,260 @@
+# [Intel Movidius Challenge](https://developer.movidius.com/competition)
+
+## TopCoder NCS Challenge 3rd place Submission: Instructions on how to train, export, and compile a network for the Intel Movidius NCS, and how use the compiled.graph to make inferences. 
+
+Code used to train and export the network is in vast majority from the work of [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune)
+Basically this is all you need to be able to train and compile a suitable working network for the Intel Movidius NCS, great repository!
+
+Very minor changes were made to this code, for simplicity it's provided here.
+
+The network implementation and Checkpoints used were taken from the MobileNet TensorFlow<sup>TM</sup> slim [models/research/slim/nets/mobilenet_v1.md](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md).
+
+Added to the NCS Challenge dataset, synsets from ImageNet 2011 Fall Release were used as well [ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.](https://arxiv.org/abs/1409.0575)
+
+## Prerequisites
+
+This code example requires that the following components are available:
+1. <a href="https://developer.movidius.com/buy" target="_blank">Movidius Neural Compute Stick</a>
+2. <a href="https://developer.movidius.com/start" target="_blank">Movidius Neural Compute SDK</a>
+3. <a href="https://github.com/tensorflow/tensorflow/releases/tag/v1.3.0" target="_blank">TensorFlow<sup>TM</sup> 1.3.0</a>
+
+### Mobilenet Accuracy Test Results - [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example) - Fine Tune all layers.
+
+| Model | Width Multiplier | Image size | Preprocessing | Accuracy-Top1 |Accuracy-Top5 | Log loss | Inference Time(ms) | Score |
+|--------|:---------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+| MobileNet |1.0 |224 |Same as Inception |79.94% |95.81% |1.89 |41.52 |908890.88 |
+| MobileNet |1.0 |192 |Same as Inception |78.97% |95.42% |2.04 |30.12 |905281.95 |
+| MobileNet |1.0 |160 |Same as Inception |77.24% |94.61% |2.34 |23.85 |894441.09 |
+| MobileNet |0.75 |224 |Same as Inception |76.29% |94.24% |2.49 |26.97 |886131.23 |
+| MobileNet |0.75 |192 |Same as Inception |74.97% |93.50% |2.75 |20.80 |878126.80 |
+| MobileNet |0.75 |160 |Same as Inception |74.02% |93.06% |2.92 |18.53 |872651.55 |
+| MobileNet |0.50 |160 |Same as Inception |67.50% |89.37% |4.27 |11.91 |824833.36 |
+
+
+### Mobilenet Accuracy Test Results - [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example), Fine Tuning only fully connected layers. 
+
+| Model | Width Multiplier | Image size | Preprocessing | Accuracy-Top1 |Accuracy-Top5 | Log loss | Inference Time(ms) | Score |
+|--------|:---------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+|MobileNet |1.0 |224 |Same as Inception |70.09% |91.17% |3.63 |40.52 |825242.58 |
+
+
+### Shallow MobileNet Accuracy Test Results - [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example). To make MobileNet shallower, 3 layers of separable filters with feature size 14 × 14 × 512 are removed.
+
+| Model | Width Multiplier | Image size | Preprocessing | Accuracy-Top1 |Accuracy-Top5 | Log loss | Inference Time(ms) | Score |
+|--------|:---------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+| Shallow MobileNet |1.0 |224 |Same as Inception |55.04% |80.40% |7.44 |31.75 |652383.53 |
+
+
+### Prepare_data
+
+#### This is a proposed method to achieve the file system tree depicted on step 3, the goal is to take the sysnets from the ImageNet Fall11 dataset and create an extended training_ground_truth.csv file.
+**Note** This step was used only to expand the dataset provided for the competiton, showing more data of an specific [synset](http://image-net.org/explore) to the model increased its accuracy for the [categories of this specific challenge](https://github.com/saduf/NCS-CHALLENGE-SUBMISSION/blob/master/prepare_data/synsets.csv). If you want to fine tune your model with you own dataset you can skip this step, and continue on step 3.
+
+
+1. Decompress all the synsets into a single training data directory. An example on how to do it can be found next; please make sure to update the location where all the synsets.tar files are located.
+```
+python prepare_data/untar_synsets.py
+```
+ 
+2. Create a new extended_ground_truth.csv file. Make sure to update the location where Imagenet Synsets directory is located.
+```
+python prepare_data/extended_ground_truth.py
+```
+
+3. Move images under a directories tree, where each directory represents a category.
+```
+prepare_data/move_files_into_categories.ipynb
+```
+```
+root/
+                  |->train/
+                     |->1/
+                     |     |-> 00****1.JPEG
+                     |     L-> 00****n.JPEG
+                     |->2/
+                     |     |-> 00****1.JPEG
+                     |     L-> 00****n.JPEG
+                     .
+                     .
+                     .
+                     L->200/
+                           |-> 00****1.JPEG
+                           L-> 00****n.JPEG
+```
+
+### Clean the dataset
+Find errors where images cannot be read and/or reshaped, resulting in an error while trying to transform them into tfrecords.
+    The following Jupyter notebook can be used to find all the conflicting files, once found you can delete them from the dataset.
+```
+prepare_data/find_corrupted_files.ipynb
+```
+
+### Generate the training and validation tfrecord files
+
+Split the data into training and validation sets by passing the value of the validation_size, once your network is tuned, you can use all the data for training (e.g. --validation_size 0.01).
+```
+python preprocess_img_dir/create_tfrecord.py --validation_size 0.3
+```
+## Train the network
+### Depending on the accuracy and time constraints for the intended implementation, please refer to the results tables.
+
+1.1 Fine Tune all layers (Higher accuracy, longer training time)
+```
+python train.py --dataset_dir=/home/ubuntu/movidius/train --labels_file=/home/ubuntu/movidius/train/labels.txt --num_epochs 15 --image_size 224 --num_classes 200 --checkpoint_path=./models/checkpoints/mobilenet/01_224/mobilenet_v1_1.0_224.ckpt --checkpoint_exclude_scopes="MobilenetV1/Logits, MobilenetV1/AuxLogits" --log_dir=./tflog/full_run/01_224 --batch_size 16 --preprocessing inception --model_name mobilenet_v1 --tb_logdir=./TB_logdir/full_run/01_224
+```
+
+1.2 Fine Tune only fully connected layers (Reduce training time by 50% or more at the expense of accuracy)
+```
+python train.py --dataset_dir=/home/ubuntu/movidius/train --labels_file=/home/ubuntu/movidius/train/labels.txt --num_epochs 15 --image_size 224 --num_classes 200 --checkpoint_path=./models/checkpoints/mobilenet/01_224/mobilenet_v1_1.0_224.ckpt --checkpoint_exclude_scopes="MobilenetV1/Logits, MobilenetV1/AuxLogits" --log_dir=./tflog/full_run/01_224_FT --batch_size 16 --preprocessing inception --model_name mobilenet_v1 --tb_logdir=./TB_logdir/full_run/01_224_FT --trainable_scopes="MobilenetV1/Logits, MobilenetV1/AuxLogits"
+```
+
+1.3 Train the shallow network (As discussed in the Mobilenet paper, you get better results accurately and timewise by by using narrow models)
+```
+python train.py --dataset_dir=/home/ubuntu/movidius/train --labels_file=/home/ubuntu/movidius/train/labels.txt --num_epochs 15 --image_size 224 --num_classes 200 --log_dir=./tflog/full_run/custom/01_224 --batch_size 16 --preprocessing inception --model_name mobilenet_v1_custom --tb_logdir=./TB_logdir/full_run/custom/01_224
+```
+
+2. Monitor your training accuracy and losses in TensorBoard<sup>TM</sup>
+```
+tensorboard --logdir ./TB_logdir/full_run/01_224
+```
+
+### Evaluate the network
+```
+python eval.py --checkpoint_path ./tflog/full_run/01_224 --num_classes 200 --labels_file /home/ubuntu/movidius/train/labels.txt --dataset_dir /home/ubuntu/movidius/train --file_pattern movidius_%s_*.tfrecord --file_pattern_for_counting movidius --batch_size 16 --preprocessing_name inception --model_name mobilenet_v1 --image_size 224
+```
+
+### [Export the network](https://movidius.github.io/ncsdk/tf_compile_guidance.html)
+```
+python export_inference_graph.py --model_name mobilenet_v1 --image_size 224 --batch_size 1 --num_classes 200 --ckpt_path ./tflog/full_run/01_224/model.ckpt-252435 --output_ckpt_path ./output/full_run/01_224/network
+```
+
+### Transfer your network.meta and weight files to your machine where NCS SDK is installed.
+
+1. Compile the network (e.g. compiled.graph)
+```
+mvNCCompile network.meta -w network -s 12 -in input -on output -o compiled.graph
+```
+
+2. Profile the network, (e.g. obtain MFLOPS, bandwidth, and processing time per layer)
+```
+mvNCProfile -in input -on output -s 12 -is 224 224 network.meta
+```
+
+### Use the compiled.graph to make inferences on the Intel Movidius NCS. 
+
+1. Make sure to update your path settings to point to the correct directories where your copiled.graph is stored. Also make sure to assign a name and location where the resulting file with the image inferences will be placed.
+```
+python inference.py path/to/datadir	
+```
+Inside inference.py make sure to properly point the following variables
+```
+EXAMPLE_ONLY = False # False for evaluation data, True for test data.
+GRAPH_FILE = "../compiled.graph" # Path to the compiled.graph file.
+LABELS_FILE = "./labels.txt" # Path to the labels file generated by the tfrecords.
+IMGSIZE = "224" # Image size used by the model.
+INFERENCE_FILE = "../inferences.csv" # Where the generated inferences file will be located.
+```
+
+## TODO
+- [ ] Train on different network architectures (e.g. DenseNet). Training and compiling was done, unsuccessfully used for inference. 
+- [ ] Support for multi NCS inference (e.g. 3 NCS sticks, inference time/3)
+- [ ] Report results 
+
+## Reference
+[MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications](https://arxiv.org/abs/1704.04861)
+
+[Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune)
+
+[models/research/slim/nets/mobilenet_v1.md](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md).
+
+[Olga Russakovsky*, Jia Deng*, Hao Su, Jonathan Krause, Sanjeev Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla, Michael Bernstein, Alexander C. Berg and Li Fei-Fei. (* = equal contribution) ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.](https://arxiv.org/abs/1409.0575)
+
+
+# Marathon Match - Solution Description
+
+**1. Introduction:**    
+  Tell us a bit about yourself, and why you have decided to participate in the contest.  
+  
+  * Name: Fernando Sadu
+  * Handle: fsadu
+  * Placement you achieved in the MM: 3rd.
+  * About you: I work as a Computer Technician for the Public Schools in Massachusetts, US. I hold a MS. Electrical Engineering from Tecnologico de Monterrey, Mexico. Before moving to the US, I worked as a L2 embedded software support engineer in Mobile Communications field; I also have experience as a product integrator (build and release) in the same field. I have also worked as a presales engineer.  
+  * Why you participated in the MM: Recently I completed the Artificial Intelligence Nano Degree from Udacity (Dec 2017), with specialization on Computer Vision, and when I saw the Intel Movidius NCS challenge, I knew it was the perfect opportunity to put in practice my new skills. Even that I had never worked with TensorFlow<sup>TM</sup> other than an introductory presentation, I knew that I had the conceptual knowledge to optimize a CNN in terms of loses and accuracy.
+
+**2. Solution Development**  
+  How did you solve the problem? What approaches did you try and what choices did you make, and why? Also, what alternative approaches did you consider?
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My first approach was to build an Image Classifier using the Keras neural network library on the top of TensorFlow<sup>TM</sup>, this was easy to decide as a first step because my experience with Keras was more substantial compared with TensorFlow<sup>TM</sup>. I knew that by using Keras I will be able to apply techniques such as bottleneck features, batch normalization, l2 regularization, and data augmentation, to name a few, without much of a learning curve.  
+Unfortunately, my first approach was not very effective; there was not a clear view on how to export the network.meta file and corresponding weights. I am still considering it as a possible option; it will be very beneficial to have access to Keras applications implementations, and checkpoints as part of my tool belt.  
+At the end I was able to build a very shallow CNN with an accuracy of 20%; obtaining this results paved the way to organize the dataset in a directories tree structure, where each directory represents a category; same structure that was kept for the final implementation of the proposed solution.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this point, it was obvious that I needed a pure TensorFlow<sup>TM</sup> implementation in order to be able to export the resulting network.meta file. Luckily, I had access to a wide sort of templates from my course with Udacity, and then I moved on to use a template for transfer learning using a VGG network. Using this approach, I was able to achieve a 60% accuracy just by using the checkpoint weights for the VGG network.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Again, the downside with this implementation was the lack of understanding on how to export the network. Nevertheless, by working on this approach for about 3 days, I was able to realize the way to clean the data for I/O errors, and conversion issues due to corrupted files. This was useful as I used the same code to clean the data in the final implementation of my solution.  
+It also proved to be valuable as the obtained accuracy using the VGG network was the expected; it served as a point of comparison with a similar classifier of about the same number of categories I had worked on before. 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Being stuck on not being able to find a way to export the network.meta file made me to take a deeper look into the NCS forums, I was reviewing different posts, and the examples provided at	the [NCS App zoo github site](https://github.com/movidius/ncappzoo); it didn’t took me long before I found the [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune) gitgub page, which at the same time is an adaptation of the [TF Slim Fine Tuning tools](https://github.com/tensorflow/models/tree/master/research/slim).  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This repository provides an end-to-end solution on how to Fine-Tune a TensorFlow<sup>TM</sup> application, and export the resulting network.meta file, it’s a great tool for the ones interested on working with the Intel NCS, considerably reducing the learning curve. After 2 weeks of work, combining the Technica Corporation repository, together with my previous findings, I was able to train, evaluate, and export a network.meta file corresponding to a MobileNet_01_224 implementation.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compiling the network.meta file and using the resulting compiled.graph file with the Intel Movidius NCS to perform inference on the sample data, was not generating any positive results at first glance, I was getting a zero score for some days. Using the debugging console in Pycharm, some breakpoints, and diving deep into the TensorFlow<sup>TM</sup> slim documentation, mainly the preprocessing part, I found the issue; my problem was that the provided file was implemented for a Caffe solution, which means it was reading images in BGR format instead of the RGB format expected by TensorFlow.  
+The training features were normalized to a range of [0,1] with a mean of 0.5 and a scale factor of 2 to finally bring its values to a range between [-1,1], opposite to the max value range between [0,255] provided by the inferences.py template. Finally, the network was trained using preprocessing same as Inception, which means that a center crop of 0.875 is performed over the image.  
+
+The first network I tried was a MobileNet_01_224 Fine-Tuning all the layers, with the provided 80k images dataset, it took around 6 hours to train on as AWS p2.xlarge instance, the resulting compiled.graph took ~40 ms to infer one image, and the compiled.graph file size was around 6.5 MB.  
+Comparing the top-1 and top-5 accuracy results from other networks like [Inception-ResNet-V2](https://keras.io/applications/#inceptionresnetv2) or [DenseNet-121](https://keras.io/applications/#densenet), we can see that that MobileNet_01_224 top-1 accuracy is lower by ~ 13 and 10 percent, respectively.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From the Intel Movidius NCS Release Notes, there are confirmed networks supported by the Intel NCS, among them we have Inception-ResNet-V2, which in turn represented a great option to experiment based on the extent of accuracy improvement. On the other side, this is very deep network with more than 10 times the number of parameters compared to of the MobileNet_01 architecture.  
+Results proved that the inference time was really penalized in terms of the evaluating Log Loss function, the resulting score thrown by the inference.py file was very similar to the one obtained by the MobileNet_01_224 model.  
+Concluding that the Inception-ResNet-V2 model was very expensive to train, was taking 10 times longer to make an image inference, ~ 400ms, and the score obtained did not represent a feasible tradeoff; the longer inference time affected negatively the evaluation function.
+
+
+**3. Final Approach**  
+  Please provide a bulleted description of your final approach. What ideas/decisions/features have been found to be the most important for your solution performance:  
+
+  * Using an extended version of the provided dataset, [ImageNet Fall 2011 version](http://www.image-net.org). By using the extended dataset, I saw a jump of ~10% in accuracy.  
+  * Generate the extended version of the ground_truth.csv file. The new extended file will be comprised of around 270,000 images distributed on the 200 categories.  
+  * Distribute the dataset into a file system where each directory represents a category. Needed to generate the tfrecords used on the training phase.  
+  * Clean the data set for I/O errors, and/or reshaping errors. These corrupted files will make the tfrecords generation to crash.  
+  * Generate training and validation tfrecords from the training data. Once the network has been tuned and tested, use the complete dataset to train the network, these added a couple percentage points to the accuracy.  
+  * Train a MobileNet 1.0 224x224 model as this proved to be the one achieving an optimal balance between accuracy and inference time. The final approach was to Fine-tune all the CNN layers, by doing this the top-1 accuracy saw an increase on accuracy of ~10% compared to Fine-tuning only the dense layers.  
+  * A MobileNet 01 160 x 160 model cuts the inference time from around 41ms/image to 23ms/image losing only ~ 2% in top-1 accuracy.  
+  * Export the network using a batch_size=1 to comply with the NCS specifications. This step will generate the TensorFlow meta file, as well as the weight files.  
+  * Compiling the network, in the NCS documentation is mentioned that you can compile the network without using the weights files, though, in the final approach these files are used to successfully compile the TensorFlow graph file (for our network configuration the resulting compiled file should be ~6.5MB).  
+  * Preprocessing images for inference:  
+    * Convert Image to an RGB format.  
+    * Normalize features to be in a range of [-1,1], by using a mean of 0.5, and an scale factor of 2.  
+  * Finally the inferences.py file return the key of the labels dictionary generated by the tfrecords as a prediction, make sure to map this key to its actual value.
+
+**4. Open Source Resources, Frameworks and Libraries**  
+  Please specify the name of the open source resource along with a URL to where it’s housed and its license type:  
+  * [Intel NC SDK](https://github.com/movidius/ncsdk), Intel Software Tools License Agreement.  
+  * [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune), MIT License.  
+  * [MobileNet TensorFlow Slim Implementation](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md), Apache License, v 2.0.  
+  * [TensorFlow 1.3.0<sup>TM</sup>](https://github.com/tensorflow/tensorflow), Apache License, v 2.0.  
+  * [OpenCV](https://opencv.org/), 3-clause BSD License.  
+  * [Numpy](https://github.com/numpy/numpy), Copyright (c) 2005-2017, NumPy Developers.
+  * [ImageNet Fall 2011](http://www.image-net.org), ImageNet project and training data includes internet photos that may be subject to copyright.
+  
+  
+**5. Potential Algorithm Improvements**  
+  Please specify any potential improvements that can be made to the algorithm:  
+  
+  * Train different network architectures, e.g. DenseNet 121 (k=32) which has a memory footprint of ~ 33 MB compared to the  ~17 MB of the MobileNet_01_224 model according to the Keras applications documentation for individual models. Training and compiling for DenseNet was successfully done, but the compiled.graph was not working for inference in combination with the Intel NCS.  
+    Deciding to go with DenseNet as the next viable model is because the number of trainable parameters and footprint is the smaller compared to the other outstanding CNN architectures, according to Keras Applications results table, [it can represent a gain in top-1 accuracy of around 8%](https://keras.io/applications/).  
+  * Support for multi NCS inference (e.g. 3 NCS sticks, inference time/3), this should contribute as well to the overall Logarithmic Loss positively by decreasing the inference time variable.  
+  * Report results and compare CNN scores, visualize tradeoff scenarios among accuracy, speed, and memory footprint.
+
+**6. Algorithm Limitations**  
+  Please specify any potential limitations with the algorithm:  
+  
+  * Only compiled.graph files (TensorFlow) for the following networks are verified to work on the Intel NCS:  
+    * Mobilenet_v1 with images size of 224x224, 192x192, and 160x160.  
+    * Mobilenet_v1_075 with images size of 224x224, 192x192, and 160x160.  
+    * Mobilenet_v1_050 with images size of 224x224, 192x192, and 160x160.  
+    * Inception-ResNet-v2 with image size of 224x224.  
+  * Other networks like DenseNet 161 (k=48) was successfully trained and exported, but the compiled.graph file did not work to on the Intel NCS.  
+  * Using deeper networks such as Inception-ResNet-v2 takes 10 times longer to infer one image in reference with Mobilenet_v1 224x224, and the gain in terms of the Log Loss improvement is minimum. Training a deeper network like Inception-ResNet-v2 or similar could take between 3-5 times longer in comparison with the wider MobileNet_01_224x224 model.  
+  * Only Inception preprocessing for inference was implemented at the inference.py supporting file, other preprocessing methods for inference would need to be implemented to support different network architectures, e.g. vgg preprocessing.
+
+**7. Deployment Guide**  
+  Please provide the exact steps required to build and deploy the code: [Do this](#transfer-your-networkmeta-and-weight-files-to-your-machine-where-ncs-sdk-is-installed)
+
+**8. Final Verification**  
+  Please provide instructions that explain how to train the algorithm and have it execute against sample data: [Do this](#clean-the-dataset)
