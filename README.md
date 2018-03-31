@@ -210,15 +210,15 @@ Concluding that the Inception-ResNet-V2 model was very expensive to train, and w
   * Generate the extended version of the ground_truth.csv file, around 270,000 images distributed on the 200 categories.  
   * Distribute the dataset into a file system where each directory represents a category. 
   * Clean the data set for I/O errors, and/or reshaping errors. 
-  * Define training and validation tfrecords from the training data. Once the network has been tuned and tested, use the complete dataset to train the network.  
+  * Define training and validation tfrecords from the training data. Once the network has been tuned and validated, use the complete dataset to train the network.  
   * Fine-Tune all layers for MobileNet_01_224 model.  
-   * A MobileNet_01_160 model cuts the inference time from around 41ms/image to 23ms/image losing only ~ 2% in top-1 accuracy.  
+    * Note: A MobileNet_01_160 model cuts the inference time from around 41ms/image to 23ms/image losing only ~ 2% in top-1 accuracy.  
   * Export the network using a batch_size=1 to comply with the NCS specifications. This step will generate the TensorFlow meta file, as well as the weight files.  
-  * Compiling the network, the resulting compiled file should be ~6.5MB).  
+  * Compile the network, the resulting compiled file should be ~6.5MB.  
   * Preprocessing images for inference:  
     * Convert Image to an RGB format.  
     * Normalize features to be in a range of [-1,1], by using a mean of 0.5, and an scale factor of 2.  
-  * Finally the inferences.py file returnS the key of the labels dictionary tfrecords, make sure to map this key to its actual value.
+  * Finally the inferences.py file returns the key of the labels tfrecords, make sure to map this key to its actual value.
 
 **4. Open Source Resources, Frameworks and Libraries**  
   Please specify the name of the open source resource along with a URL to where it’s housed and its license type:  
