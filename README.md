@@ -197,8 +197,8 @@ I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resu
   * Distribute the dataset into a file system where each directory represents a category. 
   * Clean the data set for I/O errors, and/or reshaping errors. 
   * Define training and validation tfrecords from the training data. Once the network has been tuned and validated, use the complete dataset to train the network.  
-  * Fine-Tune all layers for MobileNet_01_224 model.  
-    * Note: A MobileNet_01_160 model cuts the inference time from around 41ms/image to 23ms/image losing only ~ 2% in top-1 accuracy.  
+  * Fine-Tune all layers for MobileNet_v1_1.0_224 model.  
+    * Note: A MobileNet_v1_1.0_160 model cuts the inference time from around 41ms/image to 23ms/image losing only ~ 2% in top-1 accuracy.  
   * Export the network using a batch_size=1 to comply with the NCS specifications. This step will generate the TensorFlow meta file, as well as the weight files.  
   * Compile the network, the resulting compiled file should be ~6.5MB.  
   * Preprocessing images for inference:  
