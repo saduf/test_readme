@@ -231,7 +231,7 @@ I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resu
  * Only Inception preprocessing was implemented at the inference.py supporting file, other preprocessing implementations are needed to support different network architectures, e.g. vgg preprocessing.
 
 **7. Deployment Guide**  
-  Please provide the exact steps required to build and deploy the code: [Do this](#transfer-your-networkmeta-and-weight-files-to-your-machine-where-ncs-sdk-is-installed)
+  Please provide the exact steps required to build and deploy the code: [Do this](#how-to-train-the-algorithm)
 
 **8. Final Verification**  
   Please provide instructions that explain how to train the algorithm and have it execute against sample data: [Do this](#clean-the-dataset)
