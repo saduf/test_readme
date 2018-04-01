@@ -18,8 +18,8 @@ This code example requires that the following components are available:
 2. <a href="https://developer.movidius.com/start" target="_blank">Movidius Neural Compute SDK</a>
 3. <a href="https://github.com/tensorflow/tensorflow/releases/tag/v1.3.0" target="_blank">TensorFlow<sup>TM</sup> 1.3.0</a>
 
-### Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&pm=14775&rd=17058) for details on the scoring process.  
-Scoring Results below were obtained on the provided [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example) 
+## Results
+Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&pm=14775&rd=17058) for details on the scoring process. Scoring Results below were obtained on the provided [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example). 
 
 ### Fine Tune all layers.
 
