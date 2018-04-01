@@ -93,8 +93,9 @@ Split the data into training and validation sets by passing the value of the val
 ```
 python preprocess_img_dir/create_tfrecord.py --validation_size 0.3
 ```
-## Train the network
-### Depending on the accuracy and time constraints for the intended implementation, please refer to the results tables.
+## Train the network  
+
+Please refer to the results tables for a choice.
 
 1.1 Fine Tune all layers (Higher accuracy, longer training time)
 ```
