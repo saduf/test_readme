@@ -18,12 +18,13 @@ This code example requires that the following components are available:
 2. <a href="https://developer.movidius.com/start" target="_blank">Movidius Neural Compute SDK</a>
 3. <a href="https://github.com/tensorflow/tensorflow/releases/tag/v1.3.0" target="_blank">TensorFlow<sup>TM</sup> 1.3.0</a>
 
-### Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&pm=14775&rd=17058) for details on the scoring process. Scoring Results on the [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example) 
+### Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&pm=14775&rd=17058) for details on the scoring process.  
+Scoring Results below were obtained on the provided [80k dataset](https://github.com/movidius/ncappzoo/tree/master/apps/topcoder_example) 
 
 ### Fine Tune all layers.
 
 | Model | Accuracy-Top1 |Accuracy-Top5 | Log loss | Inference Time(ms) | Score |
-|--------:|:------:|:------:|:------:|:------:|:------:|
+|--------|:------:|:------:|:------:|:------:|:------:|
 | MobileNet_v1_1.0_224 |79.94% |95.81% |1.89 |41.52 |908890.88 |
 | MobileNet_v1_1.0_192 |78.97% |95.42% |2.04 |30.12 |905281.95 |
 | MobileNet_v1_1.0_160 |77.24% |94.61% |2.34 |23.85 |894441.09 |
@@ -36,7 +37,7 @@ This code example requires that the following components are available:
 ### Fine Tuning only fully connected layers. 
 
 | Model | Accuracy-Top1 |Accuracy-Top5 | Log loss | Inference Time(ms) | Score |
-|--------:|:------:|:------:|:------:|:------:|:------:|
+|--------|:------:|:------:|:------:|:------:|:------:|
 | MobileNet_v1_1.0_224 |70.09% |91.17% |3.63 |40.52 |825242.58 |
 
 
