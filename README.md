@@ -1,4 +1,4 @@
-# [Intel Movidius Challenge, 3rd place submission](https://developer.movidius.com/competition)
+# [Intel Movidius Challenge 3rd Place](https://developer.movidius.com/competition)
 
 Code used to train and export the network is in vast majority from the work of [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune)
 Basically this is all you need to be able to train and compile a suitable working network for the Intel Movidius NCS, great repository!
@@ -185,7 +185,7 @@ I was able to build a very shallow CNN with an accuracy of 20%; doing this paved
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Readig the [NCS forums](https://ncsforum.movidius.com/), and reviewing the apps and tutorials provided at	the [NCS App zoo github site](https://github.com/movidius/ncappzoo), I found the [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune) gitgub page, which at the same time is an adaptation of the [TF Slim Fine Tuning tools](https://github.com/tensorflow/models/tree/master/research/slim). This repository provides an end-to-end solution to Fine-Tune a TensorFlow<sup>TM</sup> model, and export the resulting network.meta file. Finally I was able to train, evaluate, and export a network.meta file corresponding to a MobileNet_01_224 implementation.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The provided file inferences.py was for a Caffe solution reading images in BGR format instead of the RGB format expected by TensorFlow. Training features had to be normalized to a range of [0,1], using a mean of 0.5 and a scale factor of 2 to finally bring its values to a range between [-1,1], and finally apply a center crop of 0.875, [see Inception Preprocessing](https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py).  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The provided file inferences.py was for a Caffe solution reading images in BGR format instead of the RGB format expected by TensorFlow<sup>TM</sup>. Training features had to be normalized to a range of [0,1], using a mean of 0.5 and a scale factor of 2 to finally bring its values to a range between [-1,1], and finally apply a center crop of 0.875, [see Inception Preprocessing](https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py).  
 
 I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resulting compiled.graph takes ~40 ms to infer one image, and the compiled.graph file size is around 6.5 MB, compared to the ~200MB for Inception-ResNet-V2. From [ncsdk release notes](https://github.com/movidius/ncsdk/blob/master/docs/release_notes.md), we can see support for Inception-ResNet-V2 wich has a top-1 accuracy ~13% higher according to reported results; on the down side, this is very deep network with more than 10 times the number of parameters than the MobileNet_v1_1.0_224 architecture. Concluding that the Inception-ResNet-V2 model was very expensive to train, and was taking 10 times longer for inference.
 
@@ -199,7 +199,7 @@ I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resu
   * Define training and validation tfrecords from the training data. Once the network has been tuned and validated, use the complete dataset to train the network.  
   * Fine-Tune all layers for MobileNet_v1_1.0_224 model.  
     * Note: A MobileNet_v1_1.0_160 model cuts the inference time from around 41ms/image to 23ms/image losing only ~ 2% in top-1 accuracy.  
-  * Export the network using a batch_size=1 to comply with the NCS specifications. This step will generate the TensorFlow meta file, as well as the weight files.  
+  * Export the network using a batch_size=1 to comply with the NCS specifications. This step will generate the TensorFlow<sup>TM/sup> meta file, as well as the weight files.  
   * Compile the network, the resulting compiled file should be ~6.5MB.  
   * Preprocessing images for inference:  
     * Convert Image to an RGB format.  
@@ -208,9 +208,9 @@ I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resu
 
 **4. Open Source Resources, Frameworks and Libraries**  
   Please specify the name of the open source resource along with a URL to where it’s housed and its license type:  
-  * [Intel NC SDK](https://github.com/movidius/ncsdk), Intel Software Tools License Agreement.  
+  * [Intel NCSDK](https://github.com/movidius/ncsdk), Intel Software Tools License Agreement.  
   * [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune), MIT License.  
-  * [MobileNet TensorFlow Slim Implementation](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md), Apache License, v 2.0.  
+  * [MobileNet TensorFlow<sup>TM</sup>nsorflow/models/blob/master/research/slim/nets/mobilenet_v1.md), Apache License, v 2.0.  
   * [TensorFlow 1.3.0<sup>TM</sup>](https://github.com/tensorflow/tensorflow), Apache License, v 2.0.  
   * [OpenCV](https://opencv.org/), 3-clause BSD License.  
   * [Numpy](https://github.com/numpy/numpy), Copyright (c) 2005-2017, NumPy Developers.
