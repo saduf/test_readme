@@ -41,6 +41,8 @@ Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?mod
 | MobileNet_v1_1.0_224 |70.09% |91.17% |3.63 |40.52 |825242.58 |
 
 
+##  How to train the algorithm
+
 ### Prepare_data
 
 #### This is a proposed method to achieve the file system tree depicted on step 3, the goal is to take the sysnets from the ImageNet Fall11 dataset and create an extended training_ground_truth.csv file.
