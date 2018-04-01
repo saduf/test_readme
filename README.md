@@ -95,7 +95,7 @@ python preprocess_img_dir/create_tfrecord.py --validation_size 0.3
 ```
 ## Train the network  
 
-Please refer to the results tables for a choice.
+Please refer to the [results tables](https://github.com/saduf/test_readme#results) for a choice.
 
 1.1 Fine Tune all layers (Higher accuracy, longer training time)
 ```
