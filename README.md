@@ -242,7 +242,7 @@ Concluding that the Inception-ResNet-V2 model was very expensive to train, and w
   Please specify any potential limitations with the algorithm:  
   
   * Limited to MobileNet model, please see results [here](#mobilenet-accuracy-test-results---80k-dataset---fine-tune-all-layers). 
-  * Only Inception preprocessing was implemented at the inference.py supporting file, implementation for other preprocessing types are needed for different network architectures, e.g. vgg preprocessing.
+ * Only Inception preprocessing was implemented at the inference.py supporting file, other preprocessing implementations are needed to support different network architectures, e.g. vgg preprocessing.
 
 **7. Deployment Guide**  
   Please provide the exact steps required to build and deploy the code: [Do this](#transfer-your-networkmeta-and-weight-files-to-your-machine-where-ncs-sdk-is-installed)
