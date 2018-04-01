@@ -123,12 +123,12 @@ python export_inference_graph.py --model_name mobilenet_v1 --image_size 224 --ba
 ### Compile and Profile  
 Transfer your network.meta and weight files to your machine where NCS SDK is installed.
 
-1. Compile the network (e.g. compiled.graph)
+1. Compile the network.
 ```
 mvNCCompile network.meta -w network -s 12 -in input -on output -o compiled.graph
 ```
 
-2. Profile the network, (e.g. obtain MFLOPS, bandwidth, and processing time per layer/total)
+2. Profile the network, obtain MFLOPS, bandwidth, and processing time per layer/total.
 ```
 mvNCProfile -in input -on output -s 12 -is 224 224 network.meta
 ```
