@@ -241,14 +241,8 @@ Concluding that the Inception-ResNet-V2 model was very expensive to train, and w
 **6. Algorithm Limitations**  
   Please specify any potential limitations with the algorithm:  
   
-  * Only compiled.graph files (TensorFlow) for the following networks are verified to work on the Intel NCS:  
-    * Mobilenet_v1 with images size of 224x224, 192x192, and 160x160.  
-    * Mobilenet_v1_075 with images size of 224x224, 192x192, and 160x160.  
-    * Mobilenet_v1_050 with images size of 224x224, 192x192, and 160x160.  
-    * Inception-ResNet-v2 with image size of 224x224.  
-  * Other networks like DenseNet 161 (k=48) was successfully trained and exported, but the compiled.graph file did not work to on the Intel NCS.  
-  * Using deeper networks such as Inception-ResNet-v2 takes 10 times longer to infer one image in reference with Mobilenet_v1 224x224, and the gain in terms of the Log Loss improvement is minimum. Training a deeper network like Inception-ResNet-v2 or similar could take between 3-5 times longer in comparison with the wider MobileNet_01_224x224 model.  
-  * Only Inception preprocessing for inference was implemented at the inference.py supporting file, other preprocessing methods for inference would need to be implemented to support different network architectures, e.g. vgg preprocessing.
+  * Limited to MobileNet model, please see results [here](#mobilenet-accuracy-test-results---80k-dataset---fine-tune-all-layers). 
+  * Only Inception preprocessing was implemented at the inference.py supporting file, implementation for other preprocessing types are needed for different network architectures, e.g. vgg preprocessing.
 
 **7. Deployment Guide**  
   Please provide the exact steps required to build and deploy the code: [Do this](#transfer-your-networkmeta-and-weight-files-to-your-machine-where-ncs-sdk-is-installed)
