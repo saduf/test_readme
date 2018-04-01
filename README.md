@@ -187,11 +187,8 @@ I was able to build a very shallow CNN with an accuracy of 20%; doing this paved
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The provided file inferences.py was for a Caffe solution reading images in BGR format instead of the RGB format expected by TensorFlow. Training features had to be normalized to a range of [0,1], using a mean of 0.5 and a scale factor of 2 to finally bring its values to a range between [-1,1], and finally apply a center crop of 0.875, [see Inception Preprocessing](https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py).  
 
-I decided to go with a MobileNet_01_224 Fine-Tuning all the layers, the resulting compiled.graph takes ~40 ms to infer one image, and the compiled.graph file size is around 6.5 MB.  
-Other networks were considered: [Inception-ResNet-V2](https://keras.io/applications/#inceptionresnetv2) and [DenseNet-121](https://keras.io/applications/#densenet), we can see that that MobileNet_01_224 top-1 accuracy is lower by ~ 13 and 10 percent, respectively.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From [ncsdk release notes](https://github.com/movidius/ncsdk/blob/master/docs/release_notes.md), we can see support for Inception-ResNet-V2, on the down side, this is very deep network with more than 10 times the number of parameters than the MobileNet_01 architecture.   
-Concluding that the Inception-ResNet-V2 model was very expensive to train, and was taking 10 times longer for inference, ~ 400 ms, at the end the resulting score was very similar to the one obtained by the wider MobileNet_01_224 model.
-
+I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resulting compiled.graph takes ~40 ms to infer one image, and the compiled.graph file size is around 6.5 MB.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From [ncsdk release notes](https://github.com/movidius/ncsdk/blob/master/docs/release_notes.md), we can see support for Inception-ResNet-V2 wich has a top-1 accuracy ~13% higher according to reported results; on the down side, this is very deep network with more than 10 times the number of parameters than the MobileNet_v1_1.0_224 architecture. Concluding that the Inception-ResNet-V2 model was very expensive to train, and was taking 10 times longer for inference.
 
 **3. Final Approach**  
   Please provide a bulleted description of your final approach. What ideas/decisions/features have been found to be the most important for your solution performance:  
