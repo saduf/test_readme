@@ -91,7 +91,7 @@ Split the data into training and validation sets by passing the value of the val
 ```
 python preprocess_img_dir/create_tfrecord.py --validation_size 0.3
 ```
-## Train the network  
+### Train the network  
 
 Please refer to the [results tables](https://github.com/saduf/test_readme#results) for a choice.
 
@@ -120,7 +120,8 @@ python eval.py --checkpoint_path ./tflog/full_run/01_224 --num_classes 200 --lab
 python export_inference_graph.py --model_name mobilenet_v1 --image_size 224 --batch_size 1 --num_classes 200 --ckpt_path ./tflog/full_run/01_224/model.ckpt-252435 --output_ckpt_path ./output/full_run/01_224/network
 ```
 
-### Transfer your network.meta and weight files to your machine where NCS SDK is installed.
+### Compile and Profile  
+Transfer your network.meta and weight files to your machine where NCS SDK is installed.
 
 1. Compile the network (e.g. compiled.graph)
 ```
