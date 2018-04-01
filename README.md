@@ -172,7 +172,7 @@ INFERENCE_FILE = "../inferences.csv" # Where the generated inferences file will 
   * Handle: fsadu
   * Placement you achieved in the MM: 3rd.
   * About you: I'm a Computer Technician for the Public Schools in Massachusetts, US. I have a MS. Electrical Engineering from Tecnologico de Monterrey, Mexico. I've worked as a L2 embedded software support engineer in Mobile Communications; I also have experience as a product integrator (build and release), and presales engineer.  
-  * Why you participated in the MM: I completed the AIND from Udacity (Dec 2017), with focus on Computer Vision, and when I saw the Intel Movidius NCS challenge, I knew it was the perfect opportunity to put it in practice. I had never worked with TensorFlow<sup>TM</sup>, nevertheless I knew that I had the conceptual knowledge to optimize a CNN in terms of loses and accuracy.
+  * Why you participated in the MM: I completed the AIND from Udacity (Dec 2017), with focus on Computer Vision, and when I saw the Intel Movidius NCS challenge, I knew it was the perfect opportunity to put it in practice.
 
 **2. Solution Development**  
   How did you solve the problem? What approaches did you try and what choices did you make, and why? Also, what alternative approaches did you consider?
