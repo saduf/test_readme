@@ -38,16 +38,15 @@ Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?mod
 
 | Model | Accuracy-Top1 |Accuracy-Top5 | Log loss | Inference Time(ms) | Score |
 |--------|:------:|:------:|:------:|:------:|:------:|
-| MobileNet_v1_1.0_224 |70.09% |91.17% |3.63 |40.52 |825242.58 |
-
+| MobileNet_v1_1.0_224 |70.09% |91.17% |3.63 |40.52 |825242.58 |  
 
 ##  How to train the algorithm
 
 ### Prepare_data
 
-This is a proposed method to organize the data as shown on step 3.
+This is a proposed method to organize the data as shown on step 3, the goal is to expand the dataset provided for the competiton with the relevant synsets from ImageNet Fall11 dataset.
 
-**Note** This step was used only to expand the dataset provided for the competiton, showing more data of an specific [synset](http://image-net.org/explore) to the model increased its accuracy for the [categories of this specific challenge](https://github.com/saduf/NCS-CHALLENGE-SUBMISSION/blob/master/prepare_data/synsets.csv). If you want to fine tune your model with you own dataset you can skip this step, and continue on step 3.
+**Note:** If you want to fine tune your model with you own data you can skip this step and continue on step 3.
 
 
 1. Decompress all the synsets into a single training data directory. An example on how to do it can be found next; please make sure to update the location where all the synsets.tar files are located.
