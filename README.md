@@ -40,7 +40,7 @@ Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?mod
 |--------|:------:|:------:|:------:|:------:|:------:|
 | MobileNet_v1_1.0_224 |70.09% |91.17% |3.63 |40.52 |825242.58 |  
 
-##  How to train the algorithm
+#  How to train the algorithm
 
 ### Prepare_data
 
@@ -49,7 +49,7 @@ This is a proposed method to organize the data as shown on step 3, the goal is t
 **Note:** If you want to fine tune your model with you own data you can skip this step and continue on step 3.
 
 
-1. Decompress all the synsets into a single training data directory. An example on how to do it can be found next; please make sure to update the location where all the synsets.tar files are located.
+1. Decompress all the synsets into a training directory. An example on how to do it can be found next; please make sure to update the location where all the synsets.tar files are located.
 ```
 python prepare_data/untar_synsets.py
 ```
@@ -59,7 +59,7 @@ python prepare_data/untar_synsets.py
 python prepare_data/extended_ground_truth.py
 ```
 
-3. Move images under a directories tree, where each directory represents a category.
+3. Move images under a categories tree, each directory represents a category.
 ```
 prepare_data/move_files_into_categories.ipynb
 ```
@@ -82,7 +82,7 @@ root/
 
 ### Clean the dataset
 Find errors where images cannot be read and/or reshaped, resulting in an error while trying to transform them into tfrecords.
-    The following Jupyter notebook can be used to find all the conflicting files, once found you can delete them from the dataset.
+    The following notebook can be used to find all the conflicting files, once found you can delete them from the dataset.
 ```
 prepare_data/find_corrupted_files.ipynb
 ```
