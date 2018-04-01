@@ -44,10 +44,10 @@ Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?mod
 
 This is a proposed method to organize the data as shown on step 3, the goal is to expand the dataset provided for the competiton with the relevant synsets from ImageNet Fall11 dataset.
 
-**Note:** If you want to fine tune your model with you own data you can skip this step and continue on step 3.
+**Note:** If you want to fine tune a model with you own data you can skip this step and continue from step 3.
 
 
-1. Decompress all the synsets into a training directory. An example on how to do it can be found next; please make sure to update the location where all the synsets.tar files are located.
+1. Decompress all the synsets into a training directory. An example on how to do it can be found next; please make sure to update the location where the synsets.tar file is located.
 ```
 python prepare_data/untar_synsets.py
 ```
