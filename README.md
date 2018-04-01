@@ -45,7 +45,8 @@ Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?mod
 
 ### Prepare_data
 
-#### This is a proposed method to achieve the file system tree depicted on step 3, the goal is to take the sysnets from the ImageNet Fall11 dataset and create an extended training_ground_truth.csv file.
+This is a proposed method to organize the data as shown on step 3.
+
 **Note** This step was used only to expand the dataset provided for the competiton, showing more data of an specific [synset](http://image-net.org/explore) to the model increased its accuracy for the [categories of this specific challenge](https://github.com/saduf/NCS-CHALLENGE-SUBMISSION/blob/master/prepare_data/synsets.csv). If you want to fine tune your model with you own dataset you can skip this step, and continue on step 3.
 
 
