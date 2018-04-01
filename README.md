@@ -7,7 +7,7 @@ Very minor changes were made to this code, for simplicity it's provided here.
 
 The network implementation and Checkpoints used were taken from the MobileNet TensorFlow<sup>TM</sup> slim [models/research/slim/nets/mobilenet_v1.md](https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md).
 
-Added to the NCS Challenge dataset, synsets from ImageNet 2011 Fall Release were used as well [ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.](https://arxiv.org/abs/1409.0575)
+Added to the NCS Challenge dataset, synsets from ImageNet 2011 Fall Release were used as well [ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.](https://arxiv.org/abs/1409.0575).
 
 ## Prerequisites
 
@@ -40,9 +40,9 @@ Refer to the [Problem Statement](https://community.topcoder.com/longcontest/?mod
 
 #  How to train the algorithm
 
-### Prepare_data
+### Prepare data
 
-This is a proposed method to organize the data as shown on step 3, the goal is to expand the dataset provided for the competiton with the relevant synsets from ImageNet Fall11 dataset.
+This is a proposed method to organize the data as shown on step 3, the goal is to expand the dataset provided for the competition with the relevant synsets from ImageNet Fall 11 dataset.
 
 **Note:** If you want to fine tune a model with you own data you can skip this step and continue from step 3.
 
@@ -120,20 +120,20 @@ python eval.py --checkpoint_path ./tflog/full_run/01_224 --num_classes 200 --lab
 python export_inference_graph.py --model_name mobilenet_v1 --image_size 224 --batch_size 1 --num_classes 200 --ckpt_path ./tflog/full_run/01_224/model.ckpt-252435 --output_ckpt_path ./output/full_run/01_224/network
 ```
 
-### Compile and Profile  
-Transfer your network.meta and weight files to your machine where NCS SDK is installed.
+### Compiling and Profiling
+Transfer your network.meta and weight files to your machine where NCSDK is installed.
 
 1. Compile the network.
 ```
 mvNCCompile network.meta -w network -s 12 -in input -on output -o compiled.graph
 ```
 
-2. Profile the network, obtain MFLOPS, bandwidth, and processing time per layer/total.
+2. Profilng the network, obtain MFLOPS, bandwidth, and processing time per layer/total.
 ```
 mvNCProfile -in input -on output -s 12 -is 224 224 network.meta
 ```
 
-### Use the compiled.graph to make inferences on the Intel Movidius NCS. 
+### Using the compiled.graph to make inferences on the Intel Movidius NCS. 
 
 1. Make sure to update the path to point to the copiled.graph file.
 ```
@@ -150,8 +150,8 @@ INFERENCE_FILE = "../inferences.csv" # Where the generated inferences file will 
 
 ## TODO
 - [ ] Train on different network architectures (e.g. DenseNet). Training and compiling was done, unsuccessfully used for inference. 
-- [ ] Support for multi NCS inference (e.g. 3 NCS sticks, inference time/3)
-- [ ] Report results 
+- [ ] Support for multi NCS inference (e.g. 3 NCS sticks, inference time/3).
+- [ ] Report results. 
 
 ## Reference
 [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications](https://arxiv.org/abs/1704.04861)
