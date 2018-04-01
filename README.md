@@ -234,10 +234,9 @@ Concluding that the Inception-ResNet-V2 model was very expensive to train, and w
 **5. Potential Algorithm Improvements**  
   Please specify any potential improvements that can be made to the algorithm:  
   
-  * Train different network architectures, e.g. DenseNet 121 (k=32) which has a memory footprint of ~ 33 MB compared to the  ~17 MB of the MobileNet_01_224 model according to the Keras applications documentation for individual models. Training and compiling for DenseNet was successfully done, but the compiled.graph was not working for inference in combination with the Intel NCS.  
-    Deciding to go with DenseNet as the next viable model is because the number of trainable parameters and footprint is the smaller compared to the other outstanding CNN architectures, according to Keras Applications results table, [it can represent a gain in top-1 accuracy of around 8%](https://keras.io/applications/).  
-  * Support for multi NCS inference (e.g. 3 NCS sticks, inference time/3), this should contribute as well to the overall Logarithmic Loss positively by decreasing the inference time variable.  
-  * Report results and compare CNN scores, visualize tradeoff scenarios among accuracy, speed, and memory footprint.
+  * Try DenseNet 121 (k=32) which has a memory footprint of ~ 33 MB compared to the  ~17 MB of the MobileNet_01_224 model, aproximately double the number of trainable parameters, it could represent a gain of ~8% in top-1 accuracy, [see Keras documentations for individual models](https://keras.io/applications/).  
+  * Implement multi NCS support for 3 NCS sticks, inference time/3, this should contribute to the overall Logarithmic Loss by decreasing the inference time.
+  * Report results and compare ConvNets scores, visualize tradeoff scenarios among accuracy, speed, and memory footprint.
 
 **6. Algorithm Limitations**  
   Please specify any potential limitations with the algorithm:  
