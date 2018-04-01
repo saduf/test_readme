@@ -1,6 +1,4 @@
-# [Intel Movidius Challenge](https://developer.movidius.com/competition)
-
-## TopCoder NCS Challenge 3rd place Submission: Instructions on how to train, export, and compile a network for the Intel Movidius NCS, and how use the compiled.graph to make inferences. 
+# [Intel Movidius Challenge, 3rd place submission](https://developer.movidius.com/competition)
 
 Code used to train and export the network is in vast majority from the work of [Technica-Corporation/TF-Movidius-Finetune](https://github.com/Technica-Corporation/TF-Movidius-Finetune)
 Basically this is all you need to be able to train and compile a suitable working network for the Intel Movidius NCS, great repository!
