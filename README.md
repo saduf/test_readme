@@ -234,4 +234,4 @@ I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resu
   Please provide the exact steps required to build and deploy the code: [Do this](#compiling-and-profiling)
 
 **8. Final Verification**  
-  Please provide instructions that explain how to train the algorithm and have it execute against sample data: [Do this](#clean-the-dataset)
+  Please provide instructions that explain how to train the algorithm and have it execute against sample data: [Do this](#how-to-train-the-algorithm)
