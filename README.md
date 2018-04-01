@@ -129,14 +129,14 @@ python export_inference_graph.py --model_name mobilenet_v1 --image_size 224 --ba
 mvNCCompile network.meta -w network -s 12 -in input -on output -o compiled.graph
 ```
 
-2. Profile the network, (e.g. obtain MFLOPS, bandwidth, and processing time per layer)
+2. Profile the network, (e.g. obtain MFLOPS, bandwidth, and processing time per layer/total)
 ```
 mvNCProfile -in input -on output -s 12 -is 224 224 network.meta
 ```
 
 ### Use the compiled.graph to make inferences on the Intel Movidius NCS. 
 
-1. Make sure to update your path settings to point to the correct directories where your copiled.graph is stored. Also make sure to assign a name and location where the resulting file with the image inferences will be placed.
+1. Make sure to update the path to point to the copiled.graph file.
 ```
 python inference.py path/to/datadir	
 ```
