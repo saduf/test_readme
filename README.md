@@ -222,7 +222,7 @@ I decided to go with a MobileNet_v1_1.0_224 Fine-Tuning all the layers, the resu
   
   * Try DenseNet 121 (k=32) which has a memory footprint of ~ 33 MB compared to the  ~17 MB of the MobileNet_01_224 model, aproximately double the number of trainable parameters, it could represent a gain of ~8% in top-1 accuracy, [see Keras documentations for individual models](https://keras.io/applications/).  
   * Implement multi NCS support for 3 NCS sticks, inference time/3, this should contribute to the overall Logarithmic Loss by decreasing the inference time.
-  * Report results and compare ConvNets scores, visualize tradeoff scenarios among accuracy, speed, and memory footprint.
+  * Report results and compare ConvNets scores, visualize tradeoff scenarios for accuracy, speed, and memory footprint.
 
 **6. Algorithm Limitations**  
   Please specify any potential limitations with the algorithm:  
