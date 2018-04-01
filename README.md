@@ -107,11 +107,6 @@ python train.py --dataset_dir=/home/ubuntu/movidius/train --labels_file=/home/ub
 python train.py --dataset_dir=/home/ubuntu/movidius/train --labels_file=/home/ubuntu/movidius/train/labels.txt --num_epochs 15 --image_size 224 --num_classes 200 --checkpoint_path=./models/checkpoints/mobilenet/01_224/mobilenet_v1_1.0_224.ckpt --checkpoint_exclude_scopes="MobilenetV1/Logits, MobilenetV1/AuxLogits" --log_dir=./tflog/full_run/01_224_FT --batch_size 16 --preprocessing inception --model_name mobilenet_v1 --tb_logdir=./TB_logdir/full_run/01_224_FT --trainable_scopes="MobilenetV1/Logits, MobilenetV1/AuxLogits"
 ```
 
-1.3 Train the shallow network (As discussed in the Mobilenet paper, you get better results accurately and timewise by by using narrow models)
-```
-python train.py --dataset_dir=/home/ubuntu/movidius/train --labels_file=/home/ubuntu/movidius/train/labels.txt --num_epochs 15 --image_size 224 --num_classes 200 --log_dir=./tflog/full_run/custom/01_224 --batch_size 16 --preprocessing inception --model_name mobilenet_v1_custom --tb_logdir=./TB_logdir/full_run/custom/01_224
-```
-
 2. Monitor your training accuracy and losses in TensorBoard<sup>TM</sup>
 ```
 tensorboard --logdir ./TB_logdir/full_run/01_224
